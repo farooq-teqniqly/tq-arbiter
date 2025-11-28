@@ -2,7 +2,7 @@
 
 **Version**: 1.0  
 **Date**: 2025-11-28  
-**Author**: Farooq Mahmud (with ChatGPT as drafting assistant)  
+**Author**: Teqniqly
 **Status**: Draft  
 **Related Documents**: Mediator HLD, Milestone‑1 Design & Implementation Guide  
 **Component Location**: `src/Teqniqly.Arbiter/Core`
