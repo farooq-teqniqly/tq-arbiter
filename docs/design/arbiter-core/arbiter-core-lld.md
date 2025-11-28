@@ -47,7 +47,7 @@ flowchart LR
 ### 2.1 Public Interfaces
 
 ```csharp
-namespace ModMon.Mediator;
+namespace Teqniqly.Arbiter.Core;
 
 public interface IMediator
 {
