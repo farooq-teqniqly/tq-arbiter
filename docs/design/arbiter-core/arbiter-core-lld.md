@@ -5,7 +5,7 @@
 **Author**: Farooq Mahmud (with ChatGPT as drafting assistant)  
 **Status**: Draft  
 **Related Documents**: Mediator HLD, Milestone‑1 Design & Implementation Guide  
-**Component Location**: `src/ModMon.Mediator/Core`
+**Component Location**: `src/Teqniqly.Arbiter/Core`
 
 ## Document History
 
@@ -327,7 +327,7 @@ public sealed class MediatorOptions
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddModMonMediator(
+    public static IServiceCollection AddArbiter(
         this IServiceCollection services,
         Action<MediatorOptions>? configure = null,
         params Assembly[] assemblies)
@@ -419,7 +419,7 @@ public sealed record GetOrder(Guid OrderId) : IQuery<Result<OrderDto>>;
 public sealed record OrderCreated(Guid OrderId) : INotification;
 
 // Registration (example)
-services.AddModMonMediator(null, typeof(CreateOrder).Assembly);
+services.AddArbiter(null, typeof(CreateOrder).Assembly);
 services.AddScoped<ICommandHandler<CreateOrder, Result<Guid>>, CreateOrderHandler>();
 services.AddScoped<IQueryHandler<GetOrder, Result<OrderDto>>, GetOrderHandler>();
 services.AddScoped<INotificationHandler<OrderCreated>, OrderProjectionHandler>();
@@ -463,7 +463,7 @@ public async Task Send_Routes_To_Command_Handler()
 {
     var sc = new ServiceCollection();
     sc.AddScoped<ICommandHandler<CreateOrder, Result<Guid>>, FakeCreateOrderHandler>();
-    sc.AddModMonMediator(null, typeof(FakeCreateOrderHandler).Assembly);
+    sc.AddArbiter(null, typeof(FakeCreateOrderHandler).Assembly);
     var mediator = sc.BuildServiceProvider().GetRequiredService<IMediator>();
 
     var result = await mediator.Send(new CreateOrder(Guid.NewGuid()));
@@ -474,7 +474,7 @@ public async Task Send_Routes_To_Command_Handler()
 public async Task Ask_Throws_When_Missing_Handler()
 {
     var sc = new ServiceCollection();
-    sc.AddModMonMediator(null, typeof(LLD_Marker).Assembly);
+    sc.AddArbiter(null, typeof(LLD_Marker).Assembly);
     var mediator = sc.BuildServiceProvider().GetRequiredService<IMediator>();
 
     await Assert.ThrowsAsync<InvalidOperationException>(() => mediator.Ask(new GetOrder(Guid.NewGuid())));
@@ -514,7 +514,7 @@ public async Task Ask_Throws_When_Missing_Handler()
 ## 13. File Layout (Proposed)
 
 ```text
-src/ModMon.Mediator/
+src/Teqniqly.Arbiter/
  ├─ Core/
  │   ├─ IMediator.cs
  │   ├─ Abstractions.cs
