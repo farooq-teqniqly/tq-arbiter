@@ -7,9 +7,8 @@ namespace Teqniqly.Arbiter.Core
     {
         /// <summary>Command message.</summary>
         Command,
+
         /// <summary>Query message.</summary>
         Query,
-        /// <summary>Notification message.</summary>
-        Notification,
     }
 }
