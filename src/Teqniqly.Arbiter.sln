@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teqniqly.Arbiter.Core.Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teqniqly.Arbiter.Core.Tests.Notifications", "Teqniqly.Arbiter.Core.Tests.Notifications\Teqniqly.Arbiter.Core.Tests.Notifications.csproj", "{6716F690-02EE-4152-BE3A-C463CA70316F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teqniqly.Arbiter.Core.Benchmarks", "Teqniqly.Arbiter.Core.Benchmarks\Teqniqly.Arbiter.Core.Benchmarks.csproj", "{4C5E359D-1BAB-492B-887F-3185CB5920D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,10 @@ Global
 		{6716F690-02EE-4152-BE3A-C463CA70316F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6716F690-02EE-4152-BE3A-C463CA70316F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6716F690-02EE-4152-BE3A-C463CA70316F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C5E359D-1BAB-492B-887F-3185CB5920D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C5E359D-1BAB-492B-887F-3185CB5920D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C5E359D-1BAB-492B-887F-3185CB5920D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C5E359D-1BAB-492B-887F-3185CB5920D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
