@@ -1,6 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Teqniqly.Arbiter.Core.Abstractions;
 using Teqniqly.Arbiter.Core.Extensions;
+using Teqniqly.Arbiter.Core.Tests.Commands;
+using Teqniqly.Arbiter.Core.Tests.Notifications;
+using Teqniqly.Arbiter.Core.Tests.Queries;
 
 namespace Teqniqly.Arbiter.Core.Tests
 {
@@ -22,6 +25,33 @@ namespace Teqniqly.Arbiter.Core.Tests
         }
 
         [Fact]
+        public async Task Can_Route_Notification_To_Handlers()
+        {
+            var sc = new ServiceCollection();
+
+            sc.AddScoped<
+                INotificationHandler<OrderCreatedNotification>,
+                OrderCreatedNotificationHandler
+            >();
+
+            sc.AddScoped<
+                INotificationHandler<OrderCreatedNotification>,
+                AnotherOrderCreatedNotificationHandler
+            >();
+
+            sc.AddArbiter(null, typeof(OrderCreatedNotificationHandler).Assembly);
+
+            var mediator = sc.BuildServiceProvider().GetRequiredService<IMediator>();
+
+            var notification = new OrderCreatedNotification(Guid.NewGuid());
+
+            await mediator.Publish(notification);
+
+            // If we reach here without exceptions, both handlers were invoked successfully.
+            Assert.True(true);
+        }
+
+        [Fact]
         public async Task Can_Route_Query_To_Handler()
         {
             var sc = new ServiceCollection();
@@ -34,29 +64,6 @@ namespace Teqniqly.Arbiter.Core.Tests
             var actualOrderId = await mediator.Ask(new GetOrderIdQuery(expectedOrderId));
 
             Assert.Equal(expectedOrderId, actualOrderId);
-        }
-
-        [Fact]
-
-    }
-
-    internal sealed record GetOrderIdQuery(Guid OrderId) : IQuery<Guid>;
-
-    internal sealed class GetOrderIdQueryHandler : IQueryHandler<GetOrderIdQuery, Guid>
-    {
-        public ValueTask<Guid> Handle(GetOrderIdQuery query, CancellationToken ct)
-        {
-            return ValueTask.FromResult(query.OrderId);
-        }
-    }
-
-    internal sealed record CreateOrderCommand(Guid OrderId) : ICommand<Guid>;
-
-    internal sealed class CreateOrderCommandHandler : ICommandHandler<CreateOrderCommand, Guid>
-    {
-        public ValueTask<Guid> Handle(CreateOrderCommand command, CancellationToken ct)
-        {
-            return ValueTask.FromResult(command.OrderId);
         }
     }
 }
