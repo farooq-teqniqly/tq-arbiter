@@ -3,12 +3,20 @@ using Teqniqly.Arbiter.Core.Abstractions;
 
 namespace Teqniqly.Arbiter.Core
 {
+    /// <summary>
+    /// Scans assemblies for handler implementations and populates a <see cref="HandlerRegistry"/>.
+    /// </summary>
     internal static class RegistryBuilder
     {
+        /// <summary>
+        /// Build a handler registry by scanning the provided assemblies (or the calling assembly when none provided).
+        /// </summary>
+        /// <param name="assemblies">Assemblies to scan for handlers.</param>
+        /// <returns>A populated <see cref="HandlerRegistry"/>.</returns>
         public static HandlerRegistry Build(params Assembly[] assemblies)
         {
             var reg = new HandlerRegistry();
-            var src = assemblies is { Length: > 0 } ? assemblies : [Assembly.GetCallingAssembly()];
+            var src = assemblies is { Length: > 0 } ? assemblies : new[] { Assembly.GetCallingAssembly() };
 
             foreach (var type in src.SelectMany(a => a.DefinedTypes))
             {

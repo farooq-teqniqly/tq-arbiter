@@ -2,18 +2,25 @@
 
 namespace Teqniqly.Arbiter.Core
 {
+    /// <summary>
+    /// Default mediator implementation that dispatches messages using a <see cref="HandlerRegistry"/> and DI.
+    /// </summary>
     internal sealed class DefaultMediator : IMediator
     {
         private readonly IMessageContextAccessor _ctx;
         private readonly HandlerRegistry _registry;
         private readonly IServiceProvider _sp;
 
+        /// <summary>
+        /// Create a new mediator instance.
+        /// </summary>
         public DefaultMediator(
             IServiceProvider sp,
             HandlerRegistry registry,
             IMessageContextAccessor ctx
         ) => (_sp, _registry, _ctx) = (sp, registry, ctx);
 
+        /// <inheritdoc />
         public async ValueTask<TResult> Ask<TResult>(
             IQuery<TResult> query,
             CancellationToken ct = default
@@ -31,6 +38,7 @@ namespace Teqniqly.Arbiter.Core
             return (TResult)(await inv(_sp, query, ctx, ct).ConfigureAwait(false))!;
         }
 
+        /// <inheritdoc />
         public async ValueTask Publish<TNotification>(
             TNotification notification,
             CancellationToken ct = default
@@ -46,6 +54,7 @@ namespace Teqniqly.Arbiter.Core
             await inv(_sp, notification, ctx, ct).ConfigureAwait(false);
         }
 
+        /// <inheritdoc />
         public async ValueTask<TResult> Send<TResult>(
             ICommand<TResult> command,
             CancellationToken ct = default
