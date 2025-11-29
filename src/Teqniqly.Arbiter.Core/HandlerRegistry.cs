@@ -17,7 +17,7 @@ namespace Teqniqly.Arbiter.Core
         /// </summary>
         public void AddCommand<TCommand, TResult>()
             where TCommand : ICommand<TResult> =>
-            _single[new(MessageKind.Command, typeof(TCommand))] = CommandInvoker<
+            _single[new RegistryKey(MessageKind.Command, typeof(TCommand))] = CommandInvoker<
                 TCommand,
                 TResult
             >.Invoke;
@@ -34,7 +34,10 @@ namespace Teqniqly.Arbiter.Core
         /// </summary>
         public void AddQuery<TQuery, TResult>()
             where TQuery : IQuery<TResult> =>
-            _single[new(MessageKind.Query, typeof(TQuery))] = QueryInvoker<TQuery, TResult>.Invoke;
+            _single[new RegistryKey(MessageKind.Query, typeof(TQuery))] = QueryInvoker<
+                TQuery,
+                TResult
+            >.Invoke;
 
         /// <summary>
         /// Try to get a notification invoker for the given notification type.
@@ -46,6 +49,6 @@ namespace Teqniqly.Arbiter.Core
         /// Try to get a command/query invoker for the given kind and message type.
         /// </summary>
         public bool TryGetSingle(MessageKind kind, Type messageType, out CQInvoker? invoker) =>
-            _single.TryGetValue(new(kind, messageType), out invoker);
+            _single.TryGetValue(new RegistryKey(kind, messageType), out invoker);
     }
 }
