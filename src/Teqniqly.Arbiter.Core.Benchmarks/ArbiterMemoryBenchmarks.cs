@@ -116,7 +116,7 @@ public class ArbiterMemoryBenchmarks
     {
         var services = new ServiceCollection();
 
-        services.AddArbiter(scanAssemblies: typeof(ArbiterMemoryBenchmarks).Assembly);
+        services.AddArbiter(typeof(ArbiterMemoryBenchmarks).Assembly);
 
         var serviceProvider = services.BuildServiceProvider();
         _mediator = serviceProvider.GetRequiredService<IMediator>();

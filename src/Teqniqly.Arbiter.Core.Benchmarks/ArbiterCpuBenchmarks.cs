@@ -80,7 +80,7 @@ public class ArbiterCpuBenchmarks
     {
         var services = new ServiceCollection();
 
-        services.AddArbiter(scanAssemblies: typeof(ArbiterCpuBenchmarks).Assembly);
+        services.AddArbiter(typeof(ArbiterCpuBenchmarks).Assembly);
 
         var serviceProvider = services.BuildServiceProvider();
         _mediator = serviceProvider.GetRequiredService<IMediator>();

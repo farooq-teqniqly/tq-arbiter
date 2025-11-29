@@ -75,5 +75,17 @@ namespace Teqniqly.Arbiter.Core.Extensions
 
             return services;
         }
+
+        /// <summary>
+        /// Registers Arbiter mediator infrastructure into the provided <paramref name="services"/>
+        /// scanning only the provided <paramref name="scanAssemblies"/> and using the default <see cref="MediatorOptions"/>.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to which Arbiter services will be added.</param>
+        /// <param name="scanAssemblies">Assemblies to scan for handler implementations.</param>
+        /// <returns>The same <see cref="IServiceCollection"/> instance so calls can be chained.</returns>
+        public static IServiceCollection AddArbiter(
+            this IServiceCollection services,
+            params Assembly[] scanAssemblies
+        ) => AddArbiter(services, configure: null, scanAssemblies);
     }
 }
