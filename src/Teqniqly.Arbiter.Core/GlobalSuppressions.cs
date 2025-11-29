@@ -9,6 +9,7 @@ using System.Diagnostics.CodeAnalysis;
     Scope = "type",
     Target = "~T:Teqniqly.Arbiter.Core.Abstractions.ICommand`1"
 )]
+
 [assembly: SuppressMessage(
     "SonarAnalyzer.Rules",
     "S2326:Unused type parameters",
@@ -16,6 +17,7 @@ using System.Diagnostics.CodeAnalysis;
     Scope = "type",
     Target = "~T:Teqniqly.Arbiter.Core.Abstractions.INotification`1"
 )]
+
 [assembly: SuppressMessage(
     "SonarAnalyzer.Rules",
     "S2326:Unused type parameters",
@@ -24,7 +26,6 @@ using System.Diagnostics.CodeAnalysis;
     Target = "~T:Teqniqly.Arbiter.Core.Abstractions.IQuery`1"
 )]
 
-// Suppress CA1040 "Avoid empty interfaces" for marker interfaces used to denote intent / message types
 [assembly: SuppressMessage(
     "Microsoft.Design",
     "CA1040:AvoidEmptyInterfaces",
@@ -37,12 +38,29 @@ using System.Diagnostics.CodeAnalysis;
     "CA1040:AvoidEmptyInterfaces",
     Justification = "These are marker interfaces used for intent and type discrimination.",
     Scope = "type",
-    Target = "~T:Teqniqly.Arbiter.Core.Abstractions.INotification`1"
+    Target = "~T:Teqniqly.Arbiter.Core.Abstractions.INotification"
 )]
+
 [assembly: SuppressMessage(
     "Microsoft.Design",
     "CA1040:AvoidEmptyInterfaces",
     Justification = "These are marker interfaces used for intent and type discrimination.",
     Scope = "type",
     Target = "~T:Teqniqly.Arbiter.Core.Abstractions.IQuery`1"
+)]
+
+[assembly: SuppressMessage(
+    "Microsoft.Performance",
+    "CA1812:AvoidUninstantiatedInternalClasses",
+    Justification = "Instantiated via DI (ServiceProvider) at runtime; reported as false positive by analyzer.",
+    Scope = "type",
+    Target = "~T:Teqniqly.Arbiter.Core.DefaultMediator"
+)]
+
+[assembly: SuppressMessage(
+    "Microsoft.Performance",
+    "CA1812:AvoidUninstantiatedInternalClasses",
+    Justification = "Instantiated via DI (ServiceProvider) at runtime; reported as false positive by analyzer.",
+    Scope = "type",
+    Target = "~T:Teqniqly.Arbiter.Core.AsyncLocalMessageContextAccessor"
 )]
