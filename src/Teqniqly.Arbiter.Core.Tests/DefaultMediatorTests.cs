@@ -15,20 +15,8 @@ namespace Teqniqly.Arbiter.Core.Tests
         {
             var sc = new ServiceCollection();
 
-            sc.AddScoped<ICommandHandler<CreateOrderCommand, Guid>, CreateOrderCommandHandler>();
-            sc.AddScoped<IQueryHandler<GetOrderIdQuery, Guid>, GetOrderIdQueryHandler>();
-
-            sc.AddScoped<
-                INotificationHandler<OrderCreatedNotification>,
-                OrderCreatedNotificationHandler
-            >();
-
-            sc.AddScoped<
-                INotificationHandler<OrderCreatedNotification>,
-                AnotherOrderCreatedNotificationHandler
-            >();
-
             sc.AddArbiter(
+                null,
                 typeof(CreateOrderCommandHandler).Assembly,
                 typeof(GetOrderIdQuery).Assembly,
                 typeof(OrderCreatedNotificationHandler).Assembly,
@@ -44,7 +32,7 @@ namespace Teqniqly.Arbiter.Core.Tests
             var sc = new ServiceCollection();
 
             // Build the registry from an unrelated assembly so it doesn't contain our test handlers
-            sc.AddArbiter(typeof(object).Assembly);
+            sc.AddArbiter(scanAssemblies: typeof(object).Assembly);
 
             var mediator = sc.BuildServiceProvider().GetRequiredService<IMediator>();
 
@@ -90,7 +78,7 @@ namespace Teqniqly.Arbiter.Core.Tests
         {
             var sc = new ServiceCollection();
 
-            sc.AddArbiter(typeof(object).Assembly);
+            sc.AddArbiter(scanAssemblies: typeof(object).Assembly);
 
             var mediator = sc.BuildServiceProvider().GetRequiredService<IMediator>();
 
@@ -106,7 +94,7 @@ namespace Teqniqly.Arbiter.Core.Tests
             var sc = new ServiceCollection();
 
             // Build the registry from an unrelated assembly so it doesn't contain our test handlers
-            sc.AddArbiter(typeof(object).Assembly);
+            sc.AddArbiter(scanAssemblies: typeof(object).Assembly);
 
             var mediator = sc.BuildServiceProvider().GetRequiredService<IMediator>();
 

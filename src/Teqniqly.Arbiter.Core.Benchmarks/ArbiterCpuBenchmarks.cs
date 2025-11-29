@@ -93,7 +93,7 @@ public class ArbiterCpuBenchmarks
             AnotherBenchmarkNotificationHandler
         >();
 
-        services.AddArbiter(typeof(ArbiterCpuBenchmarks).Assembly);
+        services.AddArbiter(scanAssemblies: typeof(ArbiterCpuBenchmarks).Assembly);
 
         var serviceProvider = services.BuildServiceProvider();
         _mediator = serviceProvider.GetRequiredService<IMediator>();

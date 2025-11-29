@@ -129,7 +129,7 @@ public class ArbiterMemoryBenchmarks
             AnotherBenchmarkNotificationHandler
         >();
 
-        services.AddArbiter(typeof(ArbiterMemoryBenchmarks).Assembly);
+        services.AddArbiter(scanAssemblies: typeof(ArbiterMemoryBenchmarks).Assembly);
 
         var serviceProvider = services.BuildServiceProvider();
         _mediator = serviceProvider.GetRequiredService<IMediator>();
