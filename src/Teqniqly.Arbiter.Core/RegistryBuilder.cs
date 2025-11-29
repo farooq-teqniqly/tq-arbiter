@@ -27,18 +27,18 @@ namespace Teqniqly.Arbiter.Core
                         continue;
                     }
 
-                    var tdef = itf.GetGenericTypeDefinition();
+                    var typeDef = itf.GetGenericTypeDefinition();
                     var args = itf.GetGenericArguments();
 
-                    if (tdef == typeof(ICommandHandler<,>))
+                    if (typeDef == typeof(ICommandHandler<,>))
                     {
                         RegisterInvoker(nameof(HandlerRegistry.AddCommand), reg, args[0], args[1]);
                     }
-                    else if (tdef == typeof(IQueryHandler<,>))
+                    else if (typeDef == typeof(IQueryHandler<,>))
                     {
                         RegisterInvoker(nameof(HandlerRegistry.AddQuery), reg, args[0], args[1]);
                     }
-                    else if (tdef == typeof(INotificationHandler<>))
+                    else if (typeDef == typeof(INotificationHandler<>))
                     {
                         RegisterInvoker(nameof(HandlerRegistry.AddNotification), reg, args[0]);
                     }
