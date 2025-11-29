@@ -16,7 +16,7 @@ namespace Teqniqly.Arbiter.Core
         public static HandlerRegistry Build(params Assembly[] assemblies)
         {
             var reg = new HandlerRegistry();
-            var src = assemblies is { Length: > 0 } ? assemblies : new[] { Assembly.GetCallingAssembly() };
+            var src = assemblies is { Length: > 0 } ? assemblies : [Assembly.GetCallingAssembly()];
 
             foreach (var type in src.SelectMany(a => a.DefinedTypes))
             {
@@ -32,28 +32,32 @@ namespace Teqniqly.Arbiter.Core
 
                     if (tdef == typeof(ICommandHandler<,>))
                     {
-                        typeof(HandlerRegistry)
-                            .GetMethod(nameof(HandlerRegistry.AddCommand))!
-                            .MakeGenericMethod(args[0], args[1])
-                            .Invoke(reg, null);
+                        RegisterInvoker(nameof(HandlerRegistry.AddCommand), reg, args[0], args[1]);
                     }
                     else if (tdef == typeof(IQueryHandler<,>))
                     {
-                        typeof(HandlerRegistry)
-                            .GetMethod(nameof(HandlerRegistry.AddQuery))!
-                            .MakeGenericMethod(args[0], args[1])
-                            .Invoke(reg, null);
+                        RegisterInvoker(nameof(HandlerRegistry.AddQuery), reg, args[0], args[1]);
                     }
                     else if (tdef == typeof(INotificationHandler<>))
                     {
-                        typeof(HandlerRegistry)
-                            .GetMethod(nameof(HandlerRegistry.AddNotification))!
-                            .MakeGenericMethod(args[0])
-                            .Invoke(reg, null);
+                        RegisterInvoker(nameof(HandlerRegistry.AddNotification), reg, args[0]);
                     }
                 }
             }
+
             return reg;
+        }
+
+        private static void RegisterInvoker(
+            string methodName,
+            HandlerRegistry reg,
+            params Type[] args
+        )
+        {
+            typeof(HandlerRegistry)
+                .GetMethod(methodName)!
+                .MakeGenericMethod(args)
+                .Invoke(reg, null);
         }
     }
 }

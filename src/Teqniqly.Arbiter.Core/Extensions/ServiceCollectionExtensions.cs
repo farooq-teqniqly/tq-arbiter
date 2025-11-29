@@ -15,10 +15,6 @@ namespace Teqniqly.Arbiter.Core.Extensions
         /// <param name="services">
         /// The <see cref="IServiceCollection"/> to add Arbiter services to. This parameter must not be <c>null</c>.
         /// </param>
-        /// <param name="configure">
-        /// An optional action used to configure a <see cref="MediatorOptions"/> instance before discovery and registration.
-        /// If <c>null</c> the default <see cref="MediatorOptions"/> values are used.
-        /// </param>
         /// <param name="assemblies">
         /// Optional assemblies to scan when building the internal handler registry. Pass one or more assemblies that contain
         /// handler implementations. If no assemblies are provided an empty array is forwarded to <c>RegistryBuilder.Build</c>.
