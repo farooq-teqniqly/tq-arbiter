@@ -19,7 +19,7 @@ namespace Teqniqly.Arbiter.Core.Benchmarks;
 )]
 public class ArbiterMemoryBenchmarks
 {
-    private const int BULK_OPERATION_COUNT = 1000;
+    private const int _bulkOperationCount = 1000;
 
     private List<BenchmarkCommand> _commands = null!;
     private IMediator _mediator = null!;
@@ -33,7 +33,7 @@ public class ArbiterMemoryBenchmarks
     [Benchmark]
     public async Task Bulk_Ask_Queries()
     {
-        for (var i = 0; i < BULK_OPERATION_COUNT; i++)
+        for (var i = 0; i < _bulkOperationCount; i++)
         {
             await _mediator.Ask(_queries[i]);
         }
@@ -47,7 +47,7 @@ public class ArbiterMemoryBenchmarks
     [Benchmark]
     public async Task Bulk_Publish_Notifications()
     {
-        for (var i = 0; i < BULK_OPERATION_COUNT; i++)
+        for (var i = 0; i < _bulkOperationCount; i++)
         {
             await _mediator.Publish(_notifications[i]);
         }
@@ -60,7 +60,7 @@ public class ArbiterMemoryBenchmarks
     [Benchmark]
     public async Task Bulk_Send_Commands()
     {
-        for (var i = 0; i < BULK_OPERATION_COUNT; i++)
+        for (var i = 0; i < _bulkOperationCount; i++)
         {
             await _mediator.Send(_commands[i]);
         }
@@ -73,7 +73,7 @@ public class ArbiterMemoryBenchmarks
     [Benchmark]
     public async Task Create_And_Ask_Queries()
     {
-        for (var i = 0; i < BULK_OPERATION_COUNT; i++)
+        for (var i = 0; i < _bulkOperationCount; i++)
         {
             var query = new BenchmarkQuery(Guid.NewGuid(), $"New Query {i}");
             await _mediator.Ask(query);
@@ -87,7 +87,7 @@ public class ArbiterMemoryBenchmarks
     [Benchmark]
     public async Task Create_And_Publish_Notifications()
     {
-        for (var i = 0; i < BULK_OPERATION_COUNT; i++)
+        for (var i = 0; i < _bulkOperationCount; i++)
         {
             var notification = new BenchmarkNotification(Guid.NewGuid(), $"New Notification {i}");
             await _mediator.Publish(notification);
@@ -101,7 +101,7 @@ public class ArbiterMemoryBenchmarks
     [Benchmark]
     public async Task Create_And_Send_Commands()
     {
-        for (var i = 0; i < BULK_OPERATION_COUNT; i++)
+        for (var i = 0; i < _bulkOperationCount; i++)
         {
             var command = new BenchmarkCommand(Guid.NewGuid(), $"New Command {i}");
             await _mediator.Send(command);
@@ -109,25 +109,12 @@ public class ArbiterMemoryBenchmarks
     }
 
     /// <summary>
-    /// Setup the service provider, mediator, and test data before running benchmarks.
+    /// Sets up the service provider, mediator, and test data before running benchmarks.
     /// </summary>
     [GlobalSetup]
     public void Setup()
     {
         var services = new ServiceCollection();
-
-        services.AddScoped<ICommandHandler<BenchmarkCommand, Guid>, BenchmarkCommandHandler>();
-        services.AddScoped<IQueryHandler<BenchmarkQuery, string>, BenchmarkQueryHandler>();
-
-        services.AddScoped<
-            INotificationHandler<BenchmarkNotification>,
-            BenchmarkNotificationHandler
-        >();
-
-        services.AddScoped<
-            INotificationHandler<BenchmarkNotification>,
-            AnotherBenchmarkNotificationHandler
-        >();
 
         services.AddArbiter(scanAssemblies: typeof(ArbiterMemoryBenchmarks).Assembly);
 
@@ -135,11 +122,11 @@ public class ArbiterMemoryBenchmarks
         _mediator = serviceProvider.GetRequiredService<IMediator>();
 
         // Pre-create test data
-        _commands = new List<BenchmarkCommand>(BULK_OPERATION_COUNT);
-        _queries = new List<BenchmarkQuery>(BULK_OPERATION_COUNT);
-        _notifications = new List<BenchmarkNotification>(BULK_OPERATION_COUNT);
+        _commands = new List<BenchmarkCommand>(_bulkOperationCount);
+        _queries = new List<BenchmarkQuery>(_bulkOperationCount);
+        _notifications = new List<BenchmarkNotification>(_bulkOperationCount);
 
-        for (var i = 0; i < BULK_OPERATION_COUNT; i++)
+        for (var i = 0; i < _bulkOperationCount; i++)
         {
             _commands.Add(new BenchmarkCommand(Guid.NewGuid(), $"Command Data {i}"));
             _queries.Add(new BenchmarkQuery(Guid.NewGuid(), $"Query Data {i}"));
@@ -154,8 +141,8 @@ public class ArbiterMemoryBenchmarks
     [Benchmark]
     public async Task<List<Guid>> Store_Command_Results_In_List()
     {
-        var results = new List<Guid>(BULK_OPERATION_COUNT);
-        for (var i = 0; i < BULK_OPERATION_COUNT; i++)
+        var results = new List<Guid>(_bulkOperationCount);
+        for (var i = 0; i < _bulkOperationCount; i++)
         {
             var result = await _mediator.Send(_commands[i]);
             results.Add(result);
@@ -170,8 +157,8 @@ public class ArbiterMemoryBenchmarks
     [Benchmark]
     public async Task<List<string>> Store_Query_Results_In_List()
     {
-        var results = new List<string>(BULK_OPERATION_COUNT);
-        for (var i = 0; i < BULK_OPERATION_COUNT; i++)
+        var results = new List<string>(_bulkOperationCount);
+        for (var i = 0; i < _bulkOperationCount; i++)
         {
             var result = await _mediator.Ask(_queries[i]);
             results.Add(result);

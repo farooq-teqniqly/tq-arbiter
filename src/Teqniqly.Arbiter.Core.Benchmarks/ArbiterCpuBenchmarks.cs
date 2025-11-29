@@ -80,19 +80,6 @@ public class ArbiterCpuBenchmarks
     {
         var services = new ServiceCollection();
 
-        services.AddScoped<ICommandHandler<BenchmarkCommand, Guid>, BenchmarkCommandHandler>();
-        services.AddScoped<IQueryHandler<BenchmarkQuery, string>, BenchmarkQueryHandler>();
-
-        services.AddScoped<
-            INotificationHandler<BenchmarkNotification>,
-            BenchmarkNotificationHandler
-        >();
-
-        services.AddScoped<
-            INotificationHandler<BenchmarkNotification>,
-            AnotherBenchmarkNotificationHandler
-        >();
-
         services.AddArbiter(scanAssemblies: typeof(ArbiterCpuBenchmarks).Assembly);
 
         var serviceProvider = services.BuildServiceProvider();
