@@ -9,6 +9,35 @@ namespace Teqniqly.Arbiter.Core.Tests
 {
     public class DefaultMediatorTests
     {
+        private readonly IMediator _mediator;
+
+        public DefaultMediatorTests()
+        {
+            var sc = new ServiceCollection();
+
+            sc.AddScoped<ICommandHandler<CreateOrderCommand, Guid>, CreateOrderCommandHandler>();
+            sc.AddScoped<IQueryHandler<GetOrderIdQuery, Guid>, GetOrderIdQueryHandler>();
+
+            sc.AddScoped<
+                INotificationHandler<OrderCreatedNotification>,
+                OrderCreatedNotificationHandler
+            >();
+
+            sc.AddScoped<
+                INotificationHandler<OrderCreatedNotification>,
+                AnotherOrderCreatedNotificationHandler
+            >();
+
+            sc.AddArbiter(
+                typeof(CreateOrderCommandHandler).Assembly,
+                typeof(GetOrderIdQuery).Assembly,
+                typeof(OrderCreatedNotificationHandler).Assembly,
+                typeof(AnotherOrderCreatedNotificationHandler).Assembly
+            );
+
+            _mediator = sc.BuildServiceProvider().GetRequiredService<IMediator>();
+        }
+
         [Fact]
         public async Task Ask_Throws_When_Missing_Handler()
         {
@@ -30,14 +59,8 @@ namespace Teqniqly.Arbiter.Core.Tests
         [Fact]
         public async Task Can_Route_Command_To_Handler()
         {
-            var sc = new ServiceCollection();
-            sc.AddScoped<ICommandHandler<CreateOrderCommand, Guid>, CreateOrderCommandHandler>();
-            sc.AddArbiter(typeof(CreateOrderCommandHandler).Assembly);
-
-            var mediator = sc.BuildServiceProvider().GetRequiredService<IMediator>();
-
             var expectedOrderId = Guid.NewGuid();
-            var actualOrderId = await mediator.Send(new CreateOrderCommand(expectedOrderId));
+            var actualOrderId = await _mediator.Send(new CreateOrderCommand(expectedOrderId));
 
             Assert.Equal(expectedOrderId, actualOrderId);
         }
@@ -45,25 +68,9 @@ namespace Teqniqly.Arbiter.Core.Tests
         [Fact]
         public async Task Can_Route_Notification_To_Handlers()
         {
-            var sc = new ServiceCollection();
-
-            sc.AddScoped<
-                INotificationHandler<OrderCreatedNotification>,
-                OrderCreatedNotificationHandler
-            >();
-
-            sc.AddScoped<
-                INotificationHandler<OrderCreatedNotification>,
-                AnotherOrderCreatedNotificationHandler
-            >();
-
-            sc.AddArbiter(typeof(OrderCreatedNotificationHandler).Assembly);
-
-            var mediator = sc.BuildServiceProvider().GetRequiredService<IMediator>();
-
             var notification = new OrderCreatedNotification(Guid.NewGuid());
 
-            await mediator.Publish(notification);
+            await _mediator.Publish(notification);
 
             // If we reach here without exceptions, both handlers were invoked successfully.
             Assert.True(true);
@@ -72,14 +79,8 @@ namespace Teqniqly.Arbiter.Core.Tests
         [Fact]
         public async Task Can_Route_Query_To_Handler()
         {
-            var sc = new ServiceCollection();
-            sc.AddScoped<IQueryHandler<GetOrderIdQuery, Guid>, GetOrderIdQueryHandler>();
-            sc.AddArbiter(typeof(GetOrderIdQueryHandler).Assembly);
-
-            var mediator = sc.BuildServiceProvider().GetRequiredService<IMediator>();
-
             var expectedOrderId = Guid.NewGuid();
-            var actualOrderId = await mediator.Ask(new GetOrderIdQuery(expectedOrderId));
+            var actualOrderId = await _mediator.Ask(new GetOrderIdQuery(expectedOrderId));
 
             Assert.Equal(expectedOrderId, actualOrderId);
         }

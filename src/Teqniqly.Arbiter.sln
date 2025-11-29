@@ -16,6 +16,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teqniqly.Arbiter.Core", "Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teqniqly.Arbiter.Core.Tests", "Teqniqly.Arbiter.Core.Tests\Teqniqly.Arbiter.Core.Tests.csproj", "{AC35622B-7C75-4602-BA1F-99CEB128A60D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teqniqly.Arbiter.Core.Tests.Queries", "Teqniqly.Arbiter.Core.Tests.Queries\Teqniqly.Arbiter.Core.Tests.Queries.csproj", "{5872E65F-23CD-4C85-A64F-9C1CE39A4109}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teqniqly.Arbiter.Core.Tests.Commands", "Teqniqly.Arbiter.Core.Tests.Commands\Teqniqly.Arbiter.Core.Tests.Commands.csproj", "{CD22D890-80C7-45D0-9F92-9CFE40A27F3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teqniqly.Arbiter.Core.Tests.Notifications", "Teqniqly.Arbiter.Core.Tests.Notifications\Teqniqly.Arbiter.Core.Tests.Notifications.csproj", "{6716F690-02EE-4152-BE3A-C463CA70316F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +36,18 @@ Global
 		{AC35622B-7C75-4602-BA1F-99CEB128A60D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC35622B-7C75-4602-BA1F-99CEB128A60D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC35622B-7C75-4602-BA1F-99CEB128A60D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5872E65F-23CD-4C85-A64F-9C1CE39A4109}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5872E65F-23CD-4C85-A64F-9C1CE39A4109}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5872E65F-23CD-4C85-A64F-9C1CE39A4109}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5872E65F-23CD-4C85-A64F-9C1CE39A4109}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD22D890-80C7-45D0-9F92-9CFE40A27F3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD22D890-80C7-45D0-9F92-9CFE40A27F3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD22D890-80C7-45D0-9F92-9CFE40A27F3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD22D890-80C7-45D0-9F92-9CFE40A27F3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6716F690-02EE-4152-BE3A-C463CA70316F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6716F690-02EE-4152-BE3A-C463CA70316F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6716F690-02EE-4152-BE3A-C463CA70316F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6716F690-02EE-4152-BE3A-C463CA70316F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
