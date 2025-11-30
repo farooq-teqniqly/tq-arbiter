@@ -1,0 +1,50 @@
+name: Start GitHub Runner VM
+on:
+  schedule:
+    - cron: "0 22 * * 0"
+  workflow_dispatch:
+    inputs:
+      azure_resource_group_name:
+        description: "Name of the Azure resource group containing the VM"
+        required: true
+        default: "tq-arbiter-rg"
+      azure_vm_name:
+        description: "Name of the Azure VM to start"
+        required: true
+        default: "tq-arbiter-perf-runner"
+env:
+  AZURE_RESOURCE_GROUP_NAME: ${{ github.event.inputs.azure_resource_group_name || 'tq-arbiter-rg' }}
+  AZURE_VM_NAME: ${{ github.event.inputs.azure_vm_name || 'tq-arbiter-perf-runner' }}
+
+permissions:
+  contents: read
+
+jobs:
+  start-vm:
+    runs-on: ubuntu-latest
+    env:
+      AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+    steps:
+      - name: Validate required secrets
+        run: |
+          missing_secrets=()
+
+          if [ -z "${{env.AZURE_CREDENTIALS}}" ]; then
+              missing_secrets+=("AZURE_CREDENTIALS")
+          fi
+
+          if [ ${#missing_secrets[@]} -ne 0 ]; then
+              echo "Missing required secrets: ${missing_secrets[*]}"
+              echo "Please configure these secrets in your repository settings."
+              exit 1
+          fi
+
+          echo "All required secrets are configured"
+
+      - name: Start runner VM
+        uses: farooq-teqniqly/azure-vm-control@3e1d436051ad5a0fe4d73547801f8761f5fd05dc
+        with:
+          azure_resource_group_name: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
+          azure_vm_name: ${{ env.AZURE_VM_NAME }}
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          operation: "start"

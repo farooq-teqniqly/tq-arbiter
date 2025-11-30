@@ -1,0 +1,264 @@
+name: Nightly Performance Benchmarks
+
+on:
+  schedule:
+    - cron: "30 22 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+env:
+  BENCHMARKDOTNET_PROJECT_NAME: Teqniqly.Arbiter.Core.Benchmarks
+  BENCHMARKDOTNET_RESULTS_DIR: BenchmarkDotNet.Artifacts/results
+
+jobs:
+  run-benchmarks:
+    name: Run Performance Benchmarks
+    runs-on: [self-hosted, linux, x64, perf]
+
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_EnableDiagnostics: 0
+
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build solution
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run benchmarks
+        run: |
+          dotnet run -c Release --project ${{env.BENCHMARKDOTNET_PROJECT_NAME}}
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: ${{env.BENCHMARKDOTNET_RESULTS_DIR}}
+          retention-days: 90
+
+  analyze-performance:
+    name: Analyze Performance Results
+    runs-on: ubuntu-latest
+    needs: run-benchmarks
+    env:
+      BENCHMARKDOTNET_MEMORY_RESULTS_CLASS: ArbiterMemoryBenchmarks
+      BENCHMARKDOTNET_CPU_RESULTS_CLASS: ArbiterCpuBenchmarks
+      PERFORMANCE_REPORT_BASELINE_DIR: performance_reviews/ci/baselines
+      PERFORMANCE_REPORT_NIGHTLY_DIR: performance_reviews/ci/nightly
+    steps:
+      - name: Set environment variables
+        run: |
+          echo "BENCHMARKDOTNET_CPU_RESULTS_CSV=${{env.BENCHMARKDOTNET_RESULTS_DIR}}/${{env.BENCHMARKDOTNET_PROJECT_NAME}}.${{env.BENCHMARKDOTNET_CPU_RESULTS_CLASS}}-report.csv" >> $GITHUB_ENV
+          echo "BENCHMARKDOTNET_MEMORY_RESULTS_CSV=${{env.BENCHMARKDOTNET_RESULTS_DIR}}/${{env.BENCHMARKDOTNET_PROJECT_NAME}}.${{env.BENCHMARKDOTNET_MEMORY_RESULTS_CLASS}}-report.csv" >> $GITHUB_ENV
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Download benchmark results
+        uses: actions/download-artifact@v4
+        with:
+          name: benchmark-results
+          path: ${{env.BENCHMARKDOTNET_RESULTS_DIR}}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Compare against baseline
+        id: compare
+        continue-on-error: true
+        run: |
+          python .github/scripts/compare-benchmarks.py \
+            --baseline ${{env.PERFORMANCE_REPORT_BASELINE_DIR}}/baseline-current.json \
+            --cpu-results ${{env.BENCHMARKDOTNET_CPU_RESULTS_CSV}} \
+            --memory-results ${{env.BENCHMARKDOTNET_MEMORY_RESULTS_CSV}} \
+            --output ${{env.PERFORMANCE_REPORT_NIGHTLY_DIR}}/performance-review-$(date +%Y-%m-%d).md \
+            --new-baseline ${{env.PERFORMANCE_REPORT_BASELINE_DIR}}/baseline-new.json \
+            --commit ${{ github.sha }}
+
+          exit_code=$?
+          echo "comparison_exit_code=$exit_code" >> $GITHUB_OUTPUT
+
+          # Exit codes: 0 = no regressions, 1 = regressions found, >1 = error
+          if [ $exit_code -gt 1 ]; then
+            echo "Error: Comparison script failed with unexpected error (exit code: $exit_code)"
+            exit 1
+          fi
+      - name: Upload performance review
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-review
+          path: ${{env.PERFORMANCE_REPORT_NIGHTLY_DIR}}/performance-review-*.md
+          retention-days: 90
+
+      - name: Check for regressions
+        id: regression-check
+        run: |
+          if [ -f .regression-detected ]; then
+            echo "has_regression=true" >> $GITHUB_OUTPUT
+            echo "severity=$(cat .regression-severity)" >> $GITHUB_OUTPUT
+          else
+            echo "has_regression=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update baseline if no regressions
+        if: steps.regression-check.outputs.has_regression == 'false'
+        run: |
+          # Move new baseline to current baseline
+          mv ${{env.PERFORMANCE_REPORT_BASELINE_DIR}}/baseline-new.json ${{env.PERFORMANCE_REPORT_BASELINE_DIR}}/baseline-current.json
+
+      - name: Save review summary for PR comment
+        id: save-summary
+        run: |
+          # Find the performance review file
+          REVIEW_FILE=$(ls ${{env.PERFORMANCE_REPORT_NIGHTLY_DIR}}/performance-review-*.md 2>/dev/null | head -n 1)
+
+          if [ -n "$REVIEW_FILE" ]; then
+            # Read the file content
+            REVIEW_CONTENT=$(cat "$REVIEW_FILE")
+
+            # Extract summary section (first 500 chars after ## Summary)
+            SUMMARY=$(echo "$REVIEW_CONTENT" | awk '/## Summary/{flag=1} flag{print; count+=length($0)} count>=500{exit}')
+
+            # Save to output (escape for GitHub Actions)
+            echo "summary<<EOF" >> $GITHUB_OUTPUT
+            echo "$SUMMARY" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+
+            echo "has_file=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_file=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create or update PR with baseline changes
+        id: cpr
+        uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6
+        with:
+          branch: perfbot/update-baselines
+          base: main
+          title: "chore: nightly performance baseline update"
+          commit-message: "chore: nightly performance baseline update"
+          body: |
+            Automated nightly update of performance baselines.
+            - Workflow run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          labels: automation, performance
+          add-paths: |
+            ${{ env.PERFORMANCE_REPORT_BASELINE_DIR }}/baseline-current.json
+            ${{ env.PERFORMANCE_REPORT_NIGHTLY_DIR }}/performance-review-*.md
+
+      - name: Create issue for regressions
+        if: steps.regression-check.outputs.has_regression == 'true' && (steps.regression-check.outputs.severity == 'MAJOR' || steps.regression-check.outputs.severity == 'CRITICAL')
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+
+            try {
+              const reviewFile = fs.readdirSync(`${process.env.PERFORMANCE_REPORT_NIGHTLY_DIR}`)
+                .find(f => f.startsWith('performance-review-'));
+
+              if (!reviewFile) {
+                core.setFailed('Performance review file not found');
+                return;
+              }
+
+              const reviewContent = fs.readFileSync(
+                `${process.env.PERFORMANCE_REPORT_NIGHTLY_DIR}/${reviewFile}`,
+                'utf8'
+              );
+
+              const severity = '${{ steps.regression-check.outputs.severity }}';
+              const severityLabel = severity === 'CRITICAL' ? '🔴' :
+                                   severity === 'MAJOR' ? '🟠' : '🟡';
+
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `${severityLabel} Performance Regression Detected - ${new Date().toISOString().split('T')[0]}`,
+                body: reviewContent,
+                labels: ['performance-regression', `severity-${severity.toLowerCase()}`]
+              });
+            } catch (error) {
+              core.setFailed(`Failed to create regression issue: ${error.message}`);
+            }
+
+      - name: Comment summary on PR
+        if: steps.cpr.outputs.pull-request-number != '' && steps.save-summary.outputs.has_file == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const hasRegression = '${{ steps.regression-check.outputs.has_regression }}';
+            const status = hasRegression === 'true' ? '⚠️ Regressions Detected' : '✅ All Benchmarks Passed';
+            const summary = process.env.SUMMARY;
+            const prNumber = Number('${{ steps.cpr.outputs.pull-request-number }}');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: `## Nightly Performance Benchmark Results\n\n**Status**: ${status}\n\n${summary}\n\n[View Workflow Run](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`
+            });
+        env:
+          SUMMARY: ${{ steps.save-summary.outputs.summary }}
+
+      - name: Auto-merge PR to preserve performance review
+        if: steps.cpr.outputs.pull-request-number != ''
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = Number('${{ steps.cpr.outputs.pull-request-number }}');
+            const hasRegression = '${{ steps.regression-check.outputs.has_regression }}';
+            const severity = '${{ steps.regression-check.outputs.severity }}';
+
+            try {
+              // Always merge the PR to preserve the performance review
+              await github.rest.pulls.merge({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                merge_method: 'squash',
+                commit_title: 'chore: update performance baseline - run ${{ github.run_id }}',
+                commit_message: `Automated baseline update from nightly performance workflow\n\nRegression Status: ${hasRegression === 'true' ? severity + ' regressions detected' : 'No regressions'}`
+              });
+
+              if (hasRegression === 'true') {
+                core.info(`✅ PR #${prNumber} merged with ${severity} regressions (baseline not updated, review preserved)`);
+              } else {
+                core.info(`✅ PR #${prNumber} merged successfully (baseline updated)`);
+              }
+            } catch (error) {
+              core.warning(`Failed to auto-merge PR #${prNumber}: ${error.message}`);
+            }
+
+      - name: Fail workflow if major regressions detected
+        if: steps.regression-check.outputs.has_regression == 'true' && (steps.regression-check.outputs.severity == 'MAJOR' || steps.regression-check.outputs.severity == 'CRITICAL')
+        run: |
+          echo "⚠️ Performance regressions detected!"
+          echo "Severity: ${{ steps.regression-check.outputs.severity }}"
+          echo "Review the generated performance review file and GitHub issue for details."
+          exit 1
+
+      - name: Log minor regressions
+        if: steps.regression-check.outputs.has_regression == 'true' && steps.regression-check.outputs.severity == 'MINOR'
+        run: |
+          echo "ℹ️ Minor performance regressions detected"
+          echo "Severity: MINOR"
+          echo "These regressions are acceptable and workflow will succeed."
+          echo "Review the performance review file for details."
