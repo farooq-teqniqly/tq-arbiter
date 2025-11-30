@@ -23,7 +23,7 @@ namespace Teqniqly.Arbiter.Core
 
             var reg = new HandlerRegistry();
 
-            foreach (var type in src.SelectMany(a => a.DefinedTypes))
+            foreach (var type in src.SelectMany(GetLoadableTypes))
             {
                 foreach (var itf in type.ImplementedInterfaces)
                 {
@@ -53,6 +53,50 @@ namespace Teqniqly.Arbiter.Core
             return reg;
         }
 
+        /// <summary>
+        /// Returns the defined types for an assembly. If the assembly fails to load some types
+        /// (typically due to missing dependencies), the successfully loaded types are returned
+        /// and load exceptions are ignored.
+        /// </summary>
+        /// <param name="assembly">The assembly to inspect.</param>
+        /// <returns>Enumerable of <see cref="TypeInfo"/> for the successfully loaded types.</returns>
+        private static IEnumerable<TypeInfo> GetLoadableTypes(Assembly assembly)
+        {
+            try
+            {
+                return assembly.DefinedTypes;
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                // Return only the types that loaded successfully, filtering out nulls
+                return ex.Types.Where(t => t is not null).Select(t => t!.GetTypeInfo());
+            }
+        }
+
+        /// <summary>
+        /// Locates a generic registration method on <see cref="HandlerRegistry"/>, closes it with the provided
+        /// generic type arguments and invokes it on the given registry instance.
+        /// </summary>
+        /// <param name="methodName">
+        /// Name of the parameterless generic registration method on <see cref="HandlerRegistry"/> to invoke.
+        /// Typical values: "AddCommand", "AddQuery", "AddNotification".
+        /// </param>
+        /// <param name="reg">The <see cref="HandlerRegistry"/> instance to invoke the method on.</param>
+        /// <param name="args">
+        /// The generic type arguments to apply to the target method. The number and order must match the
+        /// generic parameters expected by the target method (for example, 2 types for AddCommand/AddQuery,
+        /// 1 type for AddNotification).
+        /// </param>
+        /// <remarks>
+        /// This method uses reflection (<see cref="Type.GetMethod"/>, <see cref="MethodInfo.MakeGenericMethod"/>,
+        /// and <see cref="MethodInfo.Invoke"/>) to dynamically construct and call the appropriate registration
+        /// method. The invoked registration methods are parameterless; therefore no arguments are passed to the
+        /// invoked method.
+        ///
+        /// Any exceptions thrown by reflection (for example, if the method name does not exist, the generic
+        /// arity does not match, or the invoked method throws) will propagate to the caller. This behavior
+        /// surfaces registry misconfiguration early during startup.
+        /// </remarks>
         private static void RegisterInvoker(
             string methodName,
             HandlerRegistry reg,
