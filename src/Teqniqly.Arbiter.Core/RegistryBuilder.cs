@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Teqniqly.Arbiter.Core.Abstractions;
+using Teqniqly.Arbiter.Core.Extensions;
 
 namespace Teqniqly.Arbiter.Core
 {
@@ -15,8 +16,12 @@ namespace Teqniqly.Arbiter.Core
         /// <returns>A populated <see cref="HandlerRegistry"/>.</returns>
         public static HandlerRegistry Build(params Assembly[] assemblies)
         {
-            var reg = new HandlerRegistry();
             var src = assemblies is { Length: > 0 } ? assemblies : [Assembly.GetCallingAssembly()];
+
+            // Validate no duplicate handlers before building registry
+            DuplicateDetector.ThrowIfDuplicates(src);
+
+            var reg = new HandlerRegistry();
 
             foreach (var type in src.SelectMany(a => a.DefinedTypes))
             {

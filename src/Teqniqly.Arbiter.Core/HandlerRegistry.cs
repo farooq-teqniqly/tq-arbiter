@@ -15,19 +15,10 @@ namespace Teqniqly.Arbiter.Core
         /// <summary>
         /// Register a command handler invoker for the specified command and result types.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Thrown when a duplicate command handler is registered.</exception>
         public void AddCommand<TCommand, TResult>()
             where TCommand : ICommand<TResult>
         {
             var key = new RegistryKey(MessageKind.Command, typeof(TCommand));
-
-            if (_single.ContainsKey(key))
-            {
-                throw new InvalidOperationException(
-                    $"Duplicate command handler registration detected for command type '{typeof(TCommand).Name}'."
-                );
-            }
-
             _single[key] = CommandInvoker<TCommand, TResult>.Invoke;
         }
 
@@ -41,19 +32,10 @@ namespace Teqniqly.Arbiter.Core
         /// <summary>
         /// Register a query handler invoker for the specified query and result types.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Thrown when a duplicate query handler is registered.</exception>
         public void AddQuery<TQuery, TResult>()
             where TQuery : IQuery<TResult>
         {
             var key = new RegistryKey(MessageKind.Query, typeof(TQuery));
-
-            if (_single.ContainsKey(key))
-            {
-                throw new InvalidOperationException(
-                    $"Duplicate query handler registration detected for query type '{typeof(TQuery).Name}'."
-                );
-            }
-
             _single[key] = QueryInvoker<TQuery, TResult>.Invoke;
         }
 

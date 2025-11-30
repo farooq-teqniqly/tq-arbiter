@@ -15,25 +15,21 @@ public class DuplicateHandlerRegistrationTests
         var assembly = typeof(DuplicateCommandHandlersTestAssembly).Assembly;
 
         // Act
-        var exception = Assert.Throws<System.Reflection.TargetInvocationException>(
+        var exception = Assert.Throws<InvalidOperationException>(
             () => RegistryBuilder.Build(assembly)
         );
 
         // Assert
-        Assert.NotNull(exception.InnerException);
-
-        Assert.IsType<InvalidOperationException>(exception.InnerException);
-
         Assert.Contains(
             "DuplicateCommand",
-            exception.InnerException.Message,
+            exception.Message,
             StringComparison.Ordinal
         );
 
         Assert.Contains(
-            "duplicate",
-            exception.InnerException.Message,
-            StringComparison.OrdinalIgnoreCase
+            "Multiple handlers",
+            exception.Message,
+            StringComparison.Ordinal
         );
     }
 
@@ -44,19 +40,21 @@ public class DuplicateHandlerRegistrationTests
         var assembly = typeof(DuplicateQueryHandlersTestAssembly).Assembly;
 
         // Act
-        var exception = Assert.Throws<System.Reflection.TargetInvocationException>(
+        var exception = Assert.Throws<InvalidOperationException>(
             () => RegistryBuilder.Build(assembly)
         );
 
         // Assert
-        Assert.NotNull(exception.InnerException);
-        Assert.IsType<InvalidOperationException>(exception.InnerException);
-        // Note: The error may report the first duplicate found (command or query)
-        // depending on type scanning order
         Assert.Contains(
-            "duplicate",
-            exception.InnerException.Message,
-            StringComparison.OrdinalIgnoreCase
+            "DuplicateQuery",
+            exception.Message,
+            StringComparison.Ordinal
+        );
+
+        Assert.Contains(
+            "Multiple handlers",
+            exception.Message,
+            StringComparison.Ordinal
         );
     }
 }

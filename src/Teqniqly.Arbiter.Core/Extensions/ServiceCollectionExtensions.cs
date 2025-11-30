@@ -60,15 +60,13 @@ namespace Teqniqly.Arbiter.Core.Extensions
             // Auto-register handlers
             HandlerRegistration.RegisterHandlers(services, assemblies, opts);
 
-            //  Build immutable runtime registry (fast dispatch)
+            //  Build immutable runtime registry (fast dispatch, validates no duplicates)
             var registry = RegistryBuilder.Build(assemblies);
 
             // Register core services
             services.AddSingleton(registry);
             services.AddSingleton<IMessageContextAccessor, AsyncLocalMessageContextAccessor>();
             services.AddScoped<IMediator, DefaultMediator>();
-
-            DuplicateDetector.ThrowIfDuplicates(assemblies);
 
             return services;
         }
