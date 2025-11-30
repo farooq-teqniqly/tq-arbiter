@@ -7,14 +7,14 @@ on:
       azure_resource_group_name:
         description: "Name of the Azure resource group containing the VM"
         required: true
-        default: "tq-sluggo-rg"
+        default: "tq-arbiter-rg"
       azure_vm_name:
         description: "Name of the Azure VM to stop"
         required: true
-        default: "tq-sluggo-perf-runner"
+        default: "tq-arbiter-perf-runner"
 env:
-    AZURE_RESOURCE_GROUP_NAME: ${{ github.event.inputs.azure_resource_group_name || 'tq-sluggo-rg' }}
-    AZURE_VM_NAME: ${{ github.event.inputs.azure_vm_name || 'tq-sluggo-perf-runner' }}
+  AZURE_RESOURCE_GROUP_NAME: ${{ github.event.inputs.azure_resource_group_name || 'tq-arbiter-rg' }}
+  AZURE_VM_NAME: ${{ github.event.inputs.azure_vm_name || 'tq-arbiter-perf-runner' }}
 
 permissions:
   contents: read
@@ -25,26 +25,26 @@ jobs:
     env:
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
     steps:
-        - name: Validate required secrets
-          run: |
-            missing_secrets=()
+      - name: Validate required secrets
+        run: |
+          missing_secrets=()
 
-            if [ -z "${{env.AZURE_CREDENTIALS}}" ]; then
-                missing_secrets+=("AZURE_CREDENTIALS")
-            fi
+          if [ -z "${{env.AZURE_CREDENTIALS}}" ]; then
+              missing_secrets+=("AZURE_CREDENTIALS")
+          fi
 
-            if [ ${#missing_secrets[@]} -ne 0 ]; then
-                echo "Missing required secrets: ${missing_secrets[*]}"
-                echo "Please configure these secrets in your repository settings."
-                exit 1
-            fi
+          if [ ${#missing_secrets[@]} -ne 0 ]; then
+              echo "Missing required secrets: ${missing_secrets[*]}"
+              echo "Please configure these secrets in your repository settings."
+              exit 1
+          fi
 
-            echo "All required secrets are configured"
+          echo "All required secrets are configured"
 
-        - name: Stop runner VM
-          uses: farooq-teqniqly/azure-vm-control@3e1d436051ad5a0fe4d73547801f8761f5fd05dc
-          with:
-            azure_resource_group_name: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
-            azure_vm_name: ${{ env.AZURE_VM_NAME }}
-            azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-            operation: 'stop'
+      - name: Stop runner VM
+        uses: farooq-teqniqly/azure-vm-control@3e1d436051ad5a0fe4d73547801f8761f5fd05dc
+        with:
+          azure_resource_group_name: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
+          azure_vm_name: ${{ env.AZURE_VM_NAME }}
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          operation: "stop"
