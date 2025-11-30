@@ -101,7 +101,7 @@ public class CiConfig : ManualConfig
 
 #### Key Configuration Principles
 
-- **Minimal Warmup**: Use 1 warmup iteration to reduce total execution time
+- **Sufficient Warmup**: Use 5 warmup iterations to stabilize tiered JIT compilation
 - **Reduced Iterations**: Use 3-5 measurement iterations (vs. 10-15 for local runs)
 - **Statistical Relevance**: Balance speed with sufficient data for regression detection
 - **Consistency**: Use the same configuration across all CI benchmark runs for comparable results
