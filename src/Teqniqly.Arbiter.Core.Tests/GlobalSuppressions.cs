@@ -39,7 +39,7 @@ using System.Diagnostics.CodeAnalysis;
     "CA1812:AvoidUninstantiatedInternalClasses",
     Justification = "Duplicate handler types are discovered/reflected during test runs and are not directly instantiated.",
     Scope = "type",
-    Target = "~T:Teqniqly.Arbiter.Core.Extensions.DuplicateCommand"
+    Target = "~T:Teqniqly.Arbiter.Core.Tests.DuplicateQuery"
 )]
 
 [assembly: SuppressMessage(
@@ -47,5 +47,5 @@ using System.Diagnostics.CodeAnalysis;
     "CA1812:AvoidUninstantiatedInternalClasses",
     Justification = "Duplicate handler types are discovered/reflected during test runs and are not directly instantiated.",
     Scope = "type",
-    Target = "~T:Teqniqly.Arbiter.Core.Extensions.DuplicateQuery"
+    Target = "~T:Teqniqly.Arbiter.Core.Tests.DuplicateCommand"
 )]
