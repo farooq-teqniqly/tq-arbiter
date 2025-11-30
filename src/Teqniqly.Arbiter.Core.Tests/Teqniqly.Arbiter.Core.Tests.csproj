@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Teqniqly.Arbiter.Core.Tests.Commands\Teqniqly.Arbiter.Core.Tests.Commands.csproj" />
+    <ProjectReference Include="..\Teqniqly.Arbiter.Core.Tests.Notifications\Teqniqly.Arbiter.Core.Tests.Notifications.csproj" />
+    <ProjectReference Include="..\Teqniqly.Arbiter.Core.Tests.Queries\Teqniqly.Arbiter.Core.Tests.Queries.csproj" />
+    <ProjectReference Include="..\Teqniqly.Arbiter.Core\Teqniqly.Arbiter.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Commands\" />
+    <Folder Include="Notifications\" />
+    <Folder Include="Queries\" />
+  </ItemGroup>
+
+</Project>
