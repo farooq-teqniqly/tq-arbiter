@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <PackageId>Teqniqly.Results</PackageId>
+        <PackageId>Teqniqly.Arbiter.Core</PackageId>
         <Version>1.0.0-beta</Version>
         <Authors>Teqniqly</Authors>
         <Description>A lightweight, high-performance in-process mediator library for .NET.</Description>
