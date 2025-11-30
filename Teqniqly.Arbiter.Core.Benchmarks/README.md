@@ -32,7 +32,7 @@ Memory allocation benchmarks focusing on real-world usage patterns:
 To run all benchmarks with default settings:
 
 ```bash
-dotnet run -c Release --project src/Teqniqly.Arbiter.Core.Benchmarks/Teqniqly.Arbiter.Core.Benchmarks.csproj
+dotnet run -c Release --project Teqniqly.Arbiter.Core.Benchmarks/Teqniqly.Arbiter.Core.Benchmarks.csproj
 ```
 
 ### Run Specific Benchmark Class
@@ -40,13 +40,13 @@ dotnet run -c Release --project src/Teqniqly.Arbiter.Core.Benchmarks/Teqniqly.Ar
 To run only CPU benchmarks:
 
 ```bash
-dotnet run -c Release --project src/Teqniqly.Arbiter.Core.Benchmarks/Teqniqly.Arbiter.Core.Benchmarks.csproj -- --filter *ArbiterCpuBenchmarks*
+dotnet run -c Release --project Teqniqly.Arbiter.Core.Benchmarks/Teqniqly.Arbiter.Core.Benchmarks.csproj -- --filter *ArbiterCpuBenchmarks*
 ```
 
 To run only memory benchmarks:
 
 ```bash
-dotnet run -c Release --project src/Teqniqly.Arbiter.Core.Benchmarks/Teqniqly.Arbiter.Core.Benchmarks.csproj -- --filter *ArbiterMemoryBenchmarks*
+dotnet run -c Release --project Teqniqly.Arbiter.Core.Benchmarks/Teqniqly.Arbiter.Core.Benchmarks.csproj -- --filter *ArbiterMemoryBenchmarks*
 ```
 
 ### Run Specific Benchmark Method
@@ -54,7 +54,7 @@ dotnet run -c Release --project src/Teqniqly.Arbiter.Core.Benchmarks/Teqniqly.Ar
 To run a specific benchmark method:
 
 ```bash
-dotnet run -c Release --project src/Teqniqly.Arbiter.Core.Benchmarks/Teqniqly.Arbiter.Core.Benchmarks.csproj -- --filter *Send_Command*
+dotnet run -c Release --project Teqniqly.Arbiter.Core.Benchmarks/Teqniqly.Arbiter.Core.Benchmarks.csproj -- --filter *Send_Command*
 ```
 
 ## Understanding the Results
@@ -162,3 +162,4 @@ Benchmarks use realistic test data including:
 -   CPU benchmarks: Default BenchmarkDotNet iterations for statistical accuracy
 -   Memory benchmarks: 3 warmup iterations, 10 measurement iterations for consistency
 -   Bulk operations: 1000 messages per benchmark iteration
+

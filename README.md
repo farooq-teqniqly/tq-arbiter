@@ -4,36 +4,36 @@ A lightweight, high-performance in-process mediator library for .NET that implem
 
 ## Table of Contents
 
-- [The Problem](#the-problem)
-- [The Solution](#the-solution)
-- [Features](#features)
-- [Getting Started](#getting-started)
-- [Usage Examples](#usage-examples)
-- [Performance](#performance)
-- [Architecture](#architecture)
-- [Documentation](#documentation)
-- [License](#license)
+-   [The Problem](#the-problem)
+-   [The Solution](#the-solution)
+-   [Features](#features)
+-   [Getting Started](#getting-started)
+-   [Usage Examples](#usage-examples)
+-   [Performance](#performance)
+-   [Architecture](#architecture)
+-   [Documentation](#documentation)
+-   [License](#license)
 
 ## The Problem
 
 In modular monoliths, direct module-to-module invocations create tight coupling and scatter cross-cutting concerns (validation, authorization, logging, transactions) throughout application code. This leads to:
 
-- **Inconsistent Policies**: Auth, validation, and logging implemented differently across modules
-- **Boilerplate Proliferation**: Repeating the same cross-cutting code everywhere
-- **Testing Complexity**: Difficult to unit test due to coupled dependencies
-- **Poor Observability**: No centralized point for monitoring request flow
-- **Maintenance Burden**: Changes to cross-cutting policies require updates across many files
+-   **Inconsistent Policies**: Auth, validation, and logging implemented differently across modules
+-   **Boilerplate Proliferation**: Repeating the same cross-cutting code everywhere
+-   **Testing Complexity**: Difficult to unit test due to coupled dependencies
+-   **Poor Observability**: No centralized point for monitoring request flow
+-   **Maintenance Burden**: Changes to cross-cutting policies require updates across many files
 
 ## The Solution
 
 Teqniqly.Arbiter provides a centralized mediator that:
 
-- Routes **Commands**, **Queries**, and **Notifications** to their handlers
-- Enforces single-handler semantics for Commands/Queries
-- Supports fan-out for Notifications (multiple handlers)
-- Provides clean separation between application logic and cross-cutting concerns
-- Offers excellent performance with zero reflection on the hot path
-- Integrates seamlessly with Microsoft.Extensions.DependencyInjection
+-   Routes **Commands**, **Queries**, and **Notifications** to their handlers
+-   Enforces single-handler semantics for Commands/Queries
+-   Supports fan-out for Notifications (multiple handlers)
+-   Provides clean separation between application logic and cross-cutting concerns
+-   Offers excellent performance with zero reflection on the hot path
+-   Integrates seamlessly with Microsoft.Extensions.DependencyInjection
 
 **Before (Direct Invocation):**
 
@@ -312,12 +312,12 @@ _Note: Actual performance will vary based on handler complexity and system confi
 
 ### Memory Efficiency
 
-- **Zero allocations** for dispatch (registry lookup + handler invocation)
-- **ValueTask** usage minimizes GC pressure
-- **Immutable registry** enables lock-free concurrent access
-- **Prebuilt invokers** eliminate reflection overhead
+-   **Zero allocations** for dispatch (registry lookup + handler invocation)
+-   **ValueTask** usage minimizes GC pressure
+-   **Immutable registry** enables lock-free concurrent access
+-   **Prebuilt invokers** eliminate reflection overhead
 
-For detailed benchmarks, see [Benchmarks Documentation](src/Teqniqly.Arbiter.Core.Benchmarks/README.md).
+For detailed benchmarks, see [Benchmarks Documentation](Teqniqly.Arbiter.Core.Benchmarks/README.md).
 
 ## Architecture
 
@@ -337,11 +337,11 @@ flowchart TD
 
 ### Key Components
 
-- **IMediator**: Entry point for sending commands, asking queries, and publishing notifications
-- **Handler Registry**: Fast lookup table built at startup (no runtime reflection)
-- **Message Contracts**: Strongly-typed interfaces (ICommand, IQuery, INotification)
-- **Handlers**: Application logic implementing ICommandHandler, IQueryHandler, INotificationHandler
-- **Context Accessor**: Thread-safe message context (correlation IDs, user info, etc.)
+-   **IMediator**: Entry point for sending commands, asking queries, and publishing notifications
+-   **Handler Registry**: Fast lookup table built at startup (no runtime reflection)
+-   **Message Contracts**: Strongly-typed interfaces (ICommand, IQuery, INotification)
+-   **Handlers**: Application logic implementing ICommandHandler, IQueryHandler, INotificationHandler
+-   **Context Accessor**: Thread-safe message context (correlation IDs, user info, etc.)
 
 ### Design Principles
 
@@ -353,13 +353,12 @@ flowchart TD
 
 ## Documentation
 
-- **[Benchmark Results](src/Teqniqly.Arbiter.Core.Benchmarks/README.md)**: Performance metrics
+-   **[Benchmark Results](Teqniqly.Arbiter.Core.Benchmarks/README.md)**: Performance metrics
 
 ## Project Structure
 
 ```text
 tq-arbiter/
-├── src/
 │   ├── Teqniqly.Arbiter.Core/          # Core library
 │   ├── Teqniqly.Arbiter.Core.Tests/    # Unit tests
 │   └── Teqniqly.Arbiter.Core.Benchmarks/ # Performance benchmarks
@@ -372,6 +371,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- Inspired by the mediator pattern and CQS principles
-- Built with modern .NET best practices
-- Designed for modular monolith architectures
+-   Inspired by the mediator pattern and CQS principles
+-   Built with modern .NET best practices
+-   Designed for modular monolith architectures
+
