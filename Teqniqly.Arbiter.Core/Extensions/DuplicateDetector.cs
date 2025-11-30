@@ -51,7 +51,7 @@ namespace Teqniqly.Arbiter.Core.Extensions
             var duplicates = new List<string>();
 
             duplicates.AddRange(GetDuplicateMessages(commandDictionary, "Command"));
-            duplicates.AddRange(GetDuplicateMessages(queryDictionary, "Query  "));
+            duplicates.AddRange(GetDuplicateMessages(queryDictionary, "Query"));
 
             return duplicates;
         }
@@ -148,7 +148,7 @@ namespace Teqniqly.Arbiter.Core.Extensions
         /// <param name="duplicates">List of duplicate handler messages.</param>
         private static void ThrowIfDuplicatesFound(List<string> duplicates)
         {
-            if (duplicates.Count <= 0)
+            if (duplicates.Count == 0)
             {
                 return;
             }
