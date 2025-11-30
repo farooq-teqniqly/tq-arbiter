@@ -2,8 +2,8 @@ name: Deploy to NuGet
 
 on:
   push:
-    branches:
-      - main
+    # branches:
+    #   - main
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+*" # Matches v1.0.0, v1.0.0-beta, v1.0.0-alpha.1, etc.
 

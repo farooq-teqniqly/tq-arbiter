@@ -47,4 +47,4 @@ jobs:
           azure_resource_group_name: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
           azure_vm_name: ${{ env.AZURE_VM_NAME }}
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-          operation: "stop"
+          operation: "deallocate"
