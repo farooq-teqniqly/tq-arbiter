@@ -1,5 +1,4 @@
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Jobs;
 using Microsoft.Extensions.DependencyInjection;
 using Teqniqly.Arbiter.Core.Abstractions;
 using Teqniqly.Arbiter.Core.Extensions;
@@ -10,13 +9,7 @@ namespace Teqniqly.Arbiter.Core.Benchmarks;
 /// Memory benchmarks for Teqniqly.Arbiter.Core library operations.
 /// Measures allocation patterns in realistic bulk operation scenarios.
 /// </summary>
-[MemoryDiagnoser]
-[SimpleJob(
-    warmupCount: 3,
-    iterationCount: 10,
-    runtimeMoniker: RuntimeMoniker.Net90,
-    baseline: false
-)]
+[Config(typeof(CiConfig))]
 public class ArbiterMemoryBenchmarks
 {
     private const int _bulkOperationCount = 1000;

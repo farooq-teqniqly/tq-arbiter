@@ -9,7 +9,7 @@ namespace Teqniqly.Arbiter.Core.Benchmarks;
 /// CPU benchmarks for Teqniqly.Arbiter.Core library operations.
 /// Measures execution time of individual mediator operations.
 /// </summary>
-[MemoryDiagnoser]
+[Config(typeof(CiConfig))]
 public class ArbiterCpuBenchmarks
 {
     private BenchmarkCommand _command = null!;
