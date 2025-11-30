@@ -95,11 +95,11 @@ Results are saved in `BenchmarkDotNet.Artifacts` directory:
 
 When analyzing benchmark results, consider:
 
-1. **CPU Performance**: Lower execution times indicate better performance
-2. **Memory Allocations**: Fewer allocations reduce GC pressure
-3. **GC Collections**: Fewer collections (especially Gen1+) indicate better memory efficiency
-4. **Configuration Impact**: Different mediator usage patterns have different performance characteristics
-5. **Real-world Usage**: Benchmarks reflect common usage scenarios with the mediator pattern
+1.  **CPU Performance**: Lower execution times indicate better performance
+2.  **Memory Allocations**: Fewer allocations reduce GC pressure
+3.  **GC Collections**: Fewer collections (especially Gen1+) indicate better memory efficiency
+4.  **Configuration Impact**: Different mediator usage patterns have different performance characteristics
+5.  **Real-world Usage**: Benchmarks reflect common usage scenarios with the mediator pattern
 
 ## Baseline Results
 
@@ -123,21 +123,21 @@ When analyzing benchmark results, consider:
 
 ## Best Practices for Running Benchmarks
 
-1. **Close unnecessary applications** to reduce system noise
-2. **Run in Release configuration** (never Debug) for accurate results
-3. **Allow benchmarks to complete** without interruption
-4. **Run multiple times** to verify consistency
-5. **Compare relative performance** rather than absolute numbers across different machines
+1.  **Close unnecessary applications** to reduce system noise
+2.  **Run in Release configuration** (never Debug) for accurate results
+3.  **Allow benchmarks to complete** without interruption
+4.  **Run multiple times** to verify consistency
+5.  **Compare relative performance** rather than absolute numbers across different machines
 
 ## Contributing New Benchmarks
 
 When adding new benchmarks:
 
-1. Add methods to existing benchmark classes or create new ones
-2. Use `[Benchmark]` attribute on benchmark methods
-3. Include XML documentation explaining what is being measured
-4. Use descriptive method names (underscores are allowed for readability)
-5. Follow the existing naming patterns for consistency
+1.  Add methods to existing benchmark classes or create new ones
+2.  Use `[Benchmark]` attribute on benchmark methods
+3.  Include XML documentation explaining what is being measured
+4.  Use descriptive method names (underscores are allowed for readability)
+5.  Follow the existing naming patterns for consistency
 
 ## Implementation Details
 
