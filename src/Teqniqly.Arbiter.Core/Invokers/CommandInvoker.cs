@@ -22,10 +22,19 @@ namespace Teqniqly.Arbiter.Core.Invokers
         /// <summary>
         /// Invokes the resolved <see cref="ICommandHandler{TCommand, TResult}"/> from DI.
         /// </summary>
-        public static readonly CQInvoker Invoke = async (sp, msg, ctx, ct) =>
+        public static readonly CQInvoker Invoke = async (sp, msg, _, ct) =>
         {
+            if (msg is not TCommand typedMsg)
+            {
+                throw new InvalidOperationException(
+                    $"Expected command of type '{typeof(TCommand).FullName}' "
+                        + $"but received '{msg?.GetType().FullName ?? "null"}'. "
+                        + "This indicates a registry misconfiguration."
+                );
+            }
+
             var h = sp.GetRequiredService<ICommandHandler<TCommand, TResult>>();
-            return await h.Handle((TCommand)msg, ct);
+            return await h.Handle(typedMsg, ct);
         };
     }
 }

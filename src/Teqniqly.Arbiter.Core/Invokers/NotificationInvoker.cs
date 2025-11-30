@@ -22,10 +22,21 @@ namespace Teqniqly.Arbiter.Core.Invokers
         /// <summary>
         /// Invokes all resolved <see cref="INotificationHandler{TNotification}"/> instances from DI.
         /// </summary>
-        public static readonly NotificationInvoker Invoke = async (sp, msg, ctx, ct) =>
+        public static readonly NotificationInvoker Invoke = async (sp, msg, _, ct) =>
         {
+            if (msg is not TNotification typedMsg)
+            {
+                throw new InvalidOperationException(
+                    $"Expected notification of type '{typeof(TNotification).FullName}' "
+                        + $"but received '{msg?.GetType().FullName ?? "null"}'. "
+                        + "This indicates a registry misconfiguration."
+                );
+            }
+
             foreach (var h in sp.GetServices<INotificationHandler<TNotification>>())
-                await h.Handle((TNotification)msg, ct);
+            {
+                await h.Handle(typedMsg, ct);
+            }
         };
     }
 }
