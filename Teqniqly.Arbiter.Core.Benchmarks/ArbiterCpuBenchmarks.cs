@@ -12,6 +12,7 @@ namespace Teqniqly.Arbiter.Core.Benchmarks;
 [Config(typeof(CiConfig))]
 public class ArbiterCpuBenchmarks
 {
+    private const string _testData = "Test Data";
     private BenchmarkCommand _command = null!;
     private IMediator _mediator = null!;
     private BenchmarkNotification _notification = null!;
@@ -32,7 +33,7 @@ public class ArbiterCpuBenchmarks
     [Benchmark]
     public BenchmarkCommand Create_Command()
     {
-        return new BenchmarkCommand(Guid.NewGuid(), "Test Data");
+        return new BenchmarkCommand(Guid.NewGuid(), _testData);
     }
 
     /// <summary>
@@ -41,7 +42,7 @@ public class ArbiterCpuBenchmarks
     [Benchmark]
     public BenchmarkNotification Create_Notification()
     {
-        return new BenchmarkNotification(Guid.NewGuid(), "Test Data");
+        return new BenchmarkNotification(Guid.NewGuid(), _testData);
     }
 
     /// <summary>
@@ -50,7 +51,7 @@ public class ArbiterCpuBenchmarks
     [Benchmark]
     public BenchmarkQuery Create_Query()
     {
-        return new BenchmarkQuery(Guid.NewGuid(), "Test Data");
+        return new BenchmarkQuery(Guid.NewGuid(), _testData);
     }
 
     /// <summary>
@@ -85,8 +86,8 @@ public class ArbiterCpuBenchmarks
         var serviceProvider = services.BuildServiceProvider();
         _mediator = serviceProvider.GetRequiredService<IMediator>();
 
-        _command = new BenchmarkCommand(Guid.NewGuid(), "Test Data");
-        _query = new BenchmarkQuery(Guid.NewGuid(), "Test Data");
-        _notification = new BenchmarkNotification(Guid.NewGuid(), "Test Data");
+        _command = new BenchmarkCommand(Guid.NewGuid(), _testData);
+        _query = new BenchmarkQuery(Guid.NewGuid(), _testData);
+        _notification = new BenchmarkNotification(Guid.NewGuid(), _testData);
     }
 }
