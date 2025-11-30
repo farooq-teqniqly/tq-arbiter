@@ -83,11 +83,6 @@ namespace Teqniqly.Arbiter.Core.Extensions
                 );
             }
 
-            if (!opts.ValidateHandlerUniqueness)
-            {
-                return;
-            }
-
             ThrowIfDuplicate(cmdByMessage, "command");
             ThrowIfDuplicate(qryByMessage, "query");
         }

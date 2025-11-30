@@ -2,7 +2,6 @@
 // attributes that are applied to this test project.
 using System.Diagnostics.CodeAnalysis;
 
-// Suppress CA1812 for test handler classes instantiated by the test DI container or used by reflection
 [assembly: SuppressMessage(
     "Microsoft.Performance",
     "CA1812:AvoidUninstantiatedInternalClasses",
@@ -33,4 +32,20 @@ using System.Diagnostics.CodeAnalysis;
     Justification = "Test handlers are instantiated by the test DI container or used via reflection in tests.",
     Scope = "type",
     Target = "~T:Teqniqly.Arbiter.Core.Tests.Notifications.OrderCreatedNotificationHandler"
+)]
+
+[assembly: SuppressMessage(
+    "Microsoft.Performance",
+    "CA1812:AvoidUninstantiatedInternalClasses",
+    Justification = "Duplicate handler types are discovered/reflected during test runs and are not directly instantiated.",
+    Scope = "type",
+    Target = "~T:Teqniqly.Arbiter.Core.Extensions.DuplicateCommand"
+)]
+
+[assembly: SuppressMessage(
+    "Microsoft.Performance",
+    "CA1812:AvoidUninstantiatedInternalClasses",
+    Justification = "Duplicate handler types are discovered/reflected during test runs and are not directly instantiated.",
+    Scope = "type",
+    Target = "~T:Teqniqly.Arbiter.Core.Extensions.DuplicateQuery"
 )]

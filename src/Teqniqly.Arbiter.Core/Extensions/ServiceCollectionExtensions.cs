@@ -68,10 +68,7 @@ namespace Teqniqly.Arbiter.Core.Extensions
             services.AddSingleton<IMessageContextAccessor, AsyncLocalMessageContextAccessor>();
             services.AddScoped<IMediator, DefaultMediator>();
 
-            if (opts.ValidateHandlerUniqueness)
-            {
-                DuplicateDetector.ThrowIfDuplicates(assemblies);
-            }
+            DuplicateDetector.ThrowIfDuplicates(assemblies);
 
             return services;
         }

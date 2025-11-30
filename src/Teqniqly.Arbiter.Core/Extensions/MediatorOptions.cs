@@ -30,15 +30,5 @@ namespace Teqniqly.Arbiter.Core.Extensions
         /// // options.TypeFilter = t => t.IsClass && !t.IsAbstract && t.IsPublic;
         /// </example>
         public Func<Type, bool>? TypeFilter { get; set; }
-
-        /// <summary>
-        /// When <c>true</c>, validates that at most one handler is registered for each
-        /// request/notification type discovered during scanning.
-        /// </summary>
-        /// <value>
-        /// Defaults to <c>true</c>. Enable this to detect configuration errors such as
-        /// accidentally registering multiple handlers for the same request type.
-        /// </value>
-        public bool ValidateHandlerUniqueness { get; set; } = true;
     }
 }
