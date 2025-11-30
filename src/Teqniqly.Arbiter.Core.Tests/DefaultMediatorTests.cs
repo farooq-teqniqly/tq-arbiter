@@ -28,6 +28,7 @@ namespace Teqniqly.Arbiter.Core.Tests
         [Fact]
         public async Task Ask_Throws_When_Missing_Handler()
         {
+            // Arrange
             var sc = new ServiceCollection();
 
             // Build the registry from an unrelated assembly so it doesn't contain our test handlers
@@ -35,30 +36,39 @@ namespace Teqniqly.Arbiter.Core.Tests
 
             var mediator = sc.BuildServiceProvider().GetRequiredService<IMediator>();
 
+            // Act
             var exception = await Assert.ThrowsAsync<InvalidOperationException>(
                 async () =>
                     await mediator.Ask(new GetOrderIdQuery(Guid.NewGuid())).ConfigureAwait(false)
             );
 
+            // Assert
             Assert.Equal("No query handler for GetOrderIdQuery", exception.Message);
         }
 
         [Fact]
         public async Task Can_Route_Command_To_Handler()
         {
+            // Arrange
             var expectedOrderId = Guid.NewGuid();
+
+            // Act
             var actualOrderId = await _mediator.Send(new CreateOrderCommand(expectedOrderId));
 
+            // Assert
             Assert.Equal(expectedOrderId, actualOrderId);
         }
 
         [Fact]
         public async Task Can_Route_Notification_To_Handlers()
         {
+            // Arrange
             var notification = new OrderCreatedNotification(Guid.NewGuid());
 
+            // Act
             await _mediator.Publish(notification);
 
+            // Assert
             // If we reach here without exceptions, both handlers were invoked successfully.
             Assert.True(true);
         }
@@ -66,23 +76,30 @@ namespace Teqniqly.Arbiter.Core.Tests
         [Fact]
         public async Task Can_Route_Query_To_Handler()
         {
+            // Arrange
             var expectedOrderId = Guid.NewGuid();
+
+            // Act
             var actualOrderId = await _mediator.Ask(new GetOrderIdQuery(expectedOrderId));
 
+            // Assert
             Assert.Equal(expectedOrderId, actualOrderId);
         }
 
         [Fact]
         public async Task Publish_Does_Not_Throw_When_No_Handler()
         {
+            // Arrange
             var sc = new ServiceCollection();
 
             sc.AddArbiter(typeof(object).Assembly);
 
             var mediator = sc.BuildServiceProvider().GetRequiredService<IMediator>();
 
+            // Act
             await mediator.Publish(new OrderCreatedNotification(Guid.NewGuid()));
 
+            // Assert
             // If we reach here, no exception was thrown.
             Assert.True(true);
         }
@@ -90,6 +107,7 @@ namespace Teqniqly.Arbiter.Core.Tests
         [Fact]
         public async Task Send_Throws_When_Missing_Handler()
         {
+            // Arrange
             var sc = new ServiceCollection();
 
             // Build the registry from an unrelated assembly so it doesn't contain our test handlers
@@ -97,6 +115,7 @@ namespace Teqniqly.Arbiter.Core.Tests
 
             var mediator = sc.BuildServiceProvider().GetRequiredService<IMediator>();
 
+            // Act
             var exception = await Assert.ThrowsAsync<InvalidOperationException>(
                 async () =>
                     await mediator
@@ -104,6 +123,7 @@ namespace Teqniqly.Arbiter.Core.Tests
                         .ConfigureAwait(false)
             );
 
+            // Assert
             Assert.Equal("No command handler for CreateOrderCommand", exception.Message);
         }
     }
