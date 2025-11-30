@@ -1,47 +1,45 @@
-# Performance Review Results - Initial Baseline
+# Performance Review Results
 
-**Date**: 2025-11-30 18:56:46 UTC
-**Baseline**: Initial Run
-**Commit**: 2ebbce98962810b772de32f21b6a646c8d4769fe
+**Date**: 2025-11-30 22:40:15 UTC
+**Baseline**: 2025-11-30T18:56:46.325543
+**Commit**: 676dcba7ec4f7342450ca04b87cf7af9ee3bd2fa
 
 ## Summary
 
-This is the **initial benchmark run**. No baseline exists for comparison.
-
 - **Total Benchmarks**: 14
-- **Status**: ✅ INITIAL BASELINE ESTABLISHED
+- **Regressions**: 0
+- **Improvements**: 2
+- **Status**: ✅ PASS
 
-## Benchmarks Recorded
+## CPU Benchmarks
 
-The following benchmarks will serve as the baseline for future comparisons:
+| Benchmark | Baseline | Current | Change | Status |
+|-----------|----------|---------|--------|--------|
+| Ask_Query | 944.400 ns | 972.500 ns | +3.0% | ➡️  |
+| Create_Command | 640.400 ns | 630.300 ns | -1.6% | ➡️  |
+| Create_Notification | 636.000 ns | 632.700 ns | -0.5% | ➡️  |
+| Create_Query | 636.700 ns | 631.300 ns | -0.8% | ➡️  |
+| Publish_Notification | 931.000 ns | 939.200 ns | +0.9% | ➡️  |
+| Send_Command | 942.900 ns | 927.000 ns | -1.7% | ➡️  |
 
+## Memory Benchmarks
 
-### CPU Benchmarks
+| Benchmark | Baseline | Current | Alloc Change | Gen0/1 | Status |
+|-----------|----------|---------|--------------|--------|--------|
+| Bulk_Ask_Queries | 232,000 B | 232,000 B | 0.0% | 87.5/0.0 | ➡️  |
+| Bulk_Publish_Notifications | 264,002 B | 264,002 B | 0.0% | 100.0/0.0 | ➡️  |
+| Bulk_Send_Commands | 264,000 B | 0 B | -100.0% | 60.8/1.7 | ✅  |
+| Create_And_Ask_Queries | 320,000 B | 320,000 B | 0.0% | 62.5/0.0 | ➡️  |
+| Create_And_Publish_Notifications | 0 B | 368,000 B | 0.0% | 71.9/0.0 | ➡️  |
+| Create_And_Send_Commands | 359,920 B | 359,920 B | 0.0% | 67.7/0.0 | ➡️  |
+| Store_Command_Results_In_List | 0 B | 280,128 B | 0.0% | 54.1/1.7 | ➡️  |
+| Store_Query_Results_In_List | 240,128 B | 0 B | -100.0% | 48.6/1.7 | ✅  |
 
-- **Ask_Query**: 944.400 ns (0 B)
-- **Create_Command**: 640.400 ns (40 B)
-- **Create_Notification**: 636.000 ns (40 B)
-- **Create_Query**: 636.700 ns (40 B)
-- **Publish_Notification**: 931.000 ns (264 B)
-- **Send_Command**: 942.900 ns (344 B)
+## Action Items
 
-### Memory Benchmarks
-
-- **Bulk_Ask_Queries**: 908000.000 ns (232,000 B, Gen0/1: 44.6/0.0)
-- **Bulk_Publish_Notifications**: 913000.000 ns (264,002 B, Gen0/1: 100.0/0.0)
-- **Bulk_Send_Commands**: 861700.000 ns (264,000 B, Gen0/1: 50.3/0.0)
-- **Create_And_Ask_Queries**: 1597200.000 ns (320,000 B, Gen0/1: 62.5/0.0)
-- **Create_And_Publish_Notifications**: 1645800.000 ns (0 B, Gen0/1: 78.1/5.2)
-- **Create_And_Send_Commands**: 1575000.000 ns (359,920 B, Gen0/1: 67.7/0.0)
-- **Store_Command_Results_In_List**: 870200.000 ns (0 B, Gen0/1: 66.0/3.5)
-- **Store_Query_Results_In_List**: 892800.000 ns (240,128 B, Gen0/1: 46.4/0.0)
-
-## Next Steps
-
-- [x] Initial baseline established
-- [x] Future runs will compare against this baseline
-- [x] Performance regressions will be automatically detected
+- [x] No regressions detected
+- [x] Baseline will be automatically updated
 
 ## Conclusion
 
-✅ **Initial baseline successfully established.** Future benchmark runs will compare against these values.
+✅ **All benchmarks passed.** Performance is within acceptable range of baseline.
