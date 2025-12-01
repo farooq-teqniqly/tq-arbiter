@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Teqniqly.Arbiter.Core.Abstractions;
 
@@ -36,7 +36,6 @@ namespace Teqniqly.Arbiter.Core.Extensions
         ///
         /// Notes:
         /// - The method performs no explicit null-check for <paramref name="services"/> because it is an extension method; callers must ensure it is not <c>null</c>.
-        /// - If <see cref="MediatorOptions.ValidateHandlerUniqueness"/> is enabled (default: <c>false</c>), duplicate handler detection is performed via <c>DuplicateDetector.ThrowIfDuplicates</c>.
         /// </remarks>
         public static IServiceCollection AddArbiter(
             this IServiceCollection services,
@@ -53,15 +52,14 @@ namespace Teqniqly.Arbiter.Core.Extensions
                     ? scanAssemblies!.Distinct().ToArray()
                     : new[] { Assembly.GetCallingAssembly(), Assembly.GetEntryAssembly() }
                         .Where(a => a is not null)
-                        .Cast<Assembly>()
                         .Distinct()
                         .ToArray();
 
             // Auto-register handlers
-            HandlerRegistration.RegisterHandlers(services, assemblies, opts);
+            HandlerRegistration.RegisterHandlers(services, assemblies!, opts);
 
             //  Build immutable runtime registry (fast dispatch, validates no duplicates)
-            var registry = RegistryBuilder.Build(assemblies);
+            var registry = RegistryBuilder.Build(assemblies!);
 
             // Register core services
             services.AddSingleton(registry);
