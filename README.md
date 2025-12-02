@@ -1,5 +1,12 @@
 # Teqniqly.Arbiter
 
+[![NuGet](https://img.shields.io/nuget/v/Teqniqly.Arbiter.Core)](https://www.nuget.org/packages/Teqniqly.Arbiter.Core)
+[![Build and Test](https://github.com/farooq-teqniqly/tq-arbiter/actions/workflows/deploy-nuget-core.yml/badge.svg)](https://github.com/farooq-teqniqly/tq-arbiter/actions/workflows/deploy-nuget-core.yml)
+[![Nightly Performance Benchmarks](https://github.com/farooq-teqniqly/tq-arbiter/actions/workflows/nightly-performance-core.yml/badge.svg)](https://github.com/farooq-teqniqly/tq-arbiter/actions/workflows/nightly-performance-core.yml)
+[![.NET 8](https://img.shields.io/badge/.NET-8.0-blue)](https://dotnet.microsoft.com/download/dotnet/8.0)
+[![.NET 9](https://img.shields.io/badge/.NET-9.0-blue)](https://dotnet.microsoft.com/download/dotnet/9.0)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=farooq-teqniqly_tq-arbiter&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=farooq-teqniqly_tq-arbiter)
+
 A lightweight, high-performance in-process mediator library for .NET that implements the Command Query Separation (CQS) pattern for modular monoliths.
 
 ## Table of Contents
