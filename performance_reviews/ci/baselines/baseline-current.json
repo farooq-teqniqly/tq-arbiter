@@ -1,123 +1,123 @@
 {
-  "date": "2026-05-24T22:50:49.690761",
-  "commit": "890e07016b75e6e5202f6ce78c01d61c1fbb7e2f",
+  "date": "2026-06-07T22:52:56.404682",
+  "commit": "e0f56d27cc88d708f94cb9b5d816706585b1ba5e",
   "runtime": ".NET 9.0",
   "cpu_benchmarks": [
     {
       "name": "Ask_Query",
-      "mean_ns": 956.1,
-      "error_ns": 4.92,
-      "stddev_ns": 5.47,
-      "allocated_bytes": 304
+      "mean_ns": 951.7,
+      "error_ns": 9.28,
+      "stddev_ns": 10.31,
+      "allocated_bytes": 0
     },
     {
       "name": "Create_Command",
-      "mean_ns": 631.8,
-      "error_ns": 2.01,
-      "stddev_ns": 2.31,
+      "mean_ns": 626.1,
+      "error_ns": 1.59,
+      "stddev_ns": 1.77,
       "allocated_bytes": 40
     },
     {
       "name": "Create_Notification",
-      "mean_ns": 628.1,
-      "error_ns": 1.94,
-      "stddev_ns": 2.15,
+      "mean_ns": 627.4,
+      "error_ns": 1.41,
+      "stddev_ns": 1.57,
       "allocated_bytes": 40
     },
     {
       "name": "Create_Query",
-      "mean_ns": 623.6,
-      "error_ns": 1.72,
-      "stddev_ns": 1.84,
+      "mean_ns": 626.9,
+      "error_ns": 1.52,
+      "stddev_ns": 1.56,
       "allocated_bytes": 40
     },
     {
       "name": "Publish_Notification",
-      "mean_ns": 947.7,
-      "error_ns": 4.57,
-      "stddev_ns": 5.07,
-      "allocated_bytes": 264
+      "mean_ns": 941.6,
+      "error_ns": 4.25,
+      "stddev_ns": 4.89,
+      "allocated_bytes": 0
     },
     {
       "name": "Send_Command",
-      "mean_ns": 928.9,
-      "error_ns": 4.52,
-      "stddev_ns": 4.84,
+      "mean_ns": 927.4,
+      "error_ns": 5.15,
+      "stddev_ns": 5.51,
       "allocated_bytes": 344
     }
   ],
   "memory_benchmarks": [
     {
       "name": "Bulk_Ask_Queries",
-      "mean_ns": 864600.0,
-      "error_ns": 3390.0,
-      "stddev_ns": 3770.0,
+      "mean_ns": 866800.0,
+      "error_ns": 3970.0,
+      "stddev_ns": 4410.0,
       "allocated_bytes": 232000,
       "gen0": 88.5417,
       "gen1": 0.0
     },
     {
       "name": "Bulk_Publish_Notifications",
-      "mean_ns": 881800.0,
-      "error_ns": 1230.0,
-      "stddev_ns": 1370.0,
-      "allocated_bytes": 264000,
-      "gen0": 50.3472,
-      "gen1": 0.0
+      "mean_ns": 907000.0,
+      "error_ns": 5720.0,
+      "stddev_ns": 6350.0,
+      "allocated_bytes": 0,
+      "gen0": 62.5,
+      "gen1": 1.7857
     },
     {
       "name": "Bulk_Send_Commands",
-      "mean_ns": 848200.0,
-      "error_ns": 4860.0,
-      "stddev_ns": 5400.0,
+      "mean_ns": 856400.0,
+      "error_ns": 3170.0,
+      "stddev_ns": 3650.0,
       "allocated_bytes": 264000,
-      "gen0": 50.6757,
+      "gen0": 99.6622,
       "gen1": 0.0
     },
     {
       "name": "Create_And_Ask_Queries",
-      "mean_ns": 1559400.0,
-      "error_ns": 6070.0,
-      "stddev_ns": 6750.0,
+      "mean_ns": 1542900.0,
+      "error_ns": 5650.0,
+      "stddev_ns": 5810.0,
       "allocated_bytes": 320000,
       "gen0": 62.5,
       "gen1": 0.0
     },
     {
       "name": "Create_And_Publish_Notifications",
-      "mean_ns": 1581600.0,
-      "error_ns": 8490.0,
-      "stddev_ns": 9770.0,
-      "allocated_bytes": 368000,
-      "gen0": 137.5,
-      "gen1": 0.0
+      "mean_ns": 1566000.0,
+      "error_ns": 4700.0,
+      "stddev_ns": 4830.0,
+      "allocated_bytes": 0,
+      "gen0": 90.9091,
+      "gen1": 5.6818
     },
     {
       "name": "Create_And_Send_Commands",
-      "mean_ns": 1568900.0,
-      "error_ns": 8930.0,
-      "stddev_ns": 9930.0,
-      "allocated_bytes": 0,
-      "gen0": 78.125,
-      "gen1": 5.2083
+      "mean_ns": 1549500.0,
+      "error_ns": 7610.0,
+      "stddev_ns": 8460.0,
+      "allocated_bytes": 359920,
+      "gen0": 67.7083,
+      "gen1": 0.0
     },
     {
       "name": "Store_Command_Results_In_List",
-      "mean_ns": 879700.0,
-      "error_ns": 7990.0,
-      "stddev_ns": 9200.0,
+      "mean_ns": 889200.0,
+      "error_ns": 8240.0,
+      "stddev_ns": 9480.0,
       "allocated_bytes": 280128,
-      "gen0": 106.4815,
-      "gen1": 4.6296
+      "gen0": 53.8194,
+      "gen1": 1.7361
     },
     {
       "name": "Store_Query_Results_In_List",
-      "mean_ns": 880600.0,
-      "error_ns": 3850.0,
-      "stddev_ns": 4120.0,
-      "allocated_bytes": 0,
-      "gen0": 55.5556,
-      "gen1": 1.7361
+      "mean_ns": 878100.0,
+      "error_ns": 6220.0,
+      "stddev_ns": 6650.0,
+      "allocated_bytes": 240128,
+      "gen0": 46.875,
+      "gen1": 0.0
     }
   ]
 }
